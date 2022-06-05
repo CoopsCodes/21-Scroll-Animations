@@ -35,6 +35,18 @@ html {
     padding-right: 10%;
 }
 
+/* .one {
+	background-color: blue;
+}
+
+.two {
+	background-color: pink;
+}
+
+.three {
+	background-color: green;
+} */
+
 section:nth-child(odd) {
     justify-content: flex-end;
 }

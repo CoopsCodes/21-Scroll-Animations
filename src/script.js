@@ -8,7 +8,7 @@ import * as dat from "lil-gui";
 const gui = new dat.GUI();
 
 const parameters = {
-  materialColor: "#ffeded",
+  materialColor: "#bd28a9",
 };
 
 gui.addColor(parameters, "materialColor").onChange(() => {
@@ -59,6 +59,9 @@ mesh1.position.y = -objectDistance * 0;
 mesh2.position.y = -objectDistance * 1;
 mesh3.position.y = -objectDistance * 2;
 
+mesh2.position.x = -1.5;
+mesh3.position.x = 1.5;
+
 const sectionMeshes = [mesh1, mesh2, mesh3];
 
 scene.add(mesh1, mesh2, mesh3);
@@ -94,6 +97,10 @@ window.addEventListener("resize", () => {
 /**
  * Camera
  */
+// group
+const cameraGroup = new THREE.Group();
+scene.add(cameraGroup);
+
 // Base camera
 const camera = new THREE.PerspectiveCamera(
   35,
@@ -102,7 +109,7 @@ const camera = new THREE.PerspectiveCamera(
   100
 );
 camera.position.z = 6;
-scene.add(camera);
+cameraGroup.add(camera);
 
 /**
  * Renderer
@@ -123,6 +130,21 @@ window.addEventListener("scroll", () => {
 });
 
 /**
+ * Cursor
+ */
+let cursor = {
+  x: 0,
+  y: 0,
+};
+
+window.addEventListener("mousemove", (e) => {
+  cursor.x = e.clientX / sizes.width - 0.5;
+  cursor.y = e.clientY / sizes.height - 0.5;
+
+  console.log(cursor);
+});
+
+/*
  * Animate
  */
 const clock = new THREE.Clock();
@@ -132,6 +154,11 @@ const tick = () => {
 
   // Animate camera based on user scroll
   camera.position.y = (-scrollY / sizes.height) * objectDistance;
+
+  const parallaxX = cursor.x;
+  const parallaxY = -cursor.y;
+  cameraGroup.position.x = parallaxX;
+  cameraGroup.position.y = parallaxY;
 
   // Animate meshes
   for (const mesh of sectionMeshes) {
