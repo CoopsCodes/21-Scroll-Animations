@@ -4,14 +4,17 @@
     padding: 0;
 }
 
-html,
+/* html,
 body
 {
     overflow: hidden;
+} */
+
+html {
+ background: #1e1a20;
 }
 
-.webgl
-{
+.webgl {
     position: fixed;
     top: 0;
     left: 0;
@@ -19,8 +22,7 @@ body
 }
 
 
-.section
-{
+.section {
     display: flex;
     align-items: center;
     height: 100vh;
@@ -33,7 +35,6 @@ body
     padding-right: 10%;
 }
 
-section:nth-child(odd)
-{
+section:nth-child(odd) {
     justify-content: flex-end;
 }
