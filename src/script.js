@@ -13,6 +13,7 @@ const parameters = {
 
 gui.addColor(parameters, "materialColor").onChange(() => {
   material.color.set(parameters.materialColor);
+  particlesMaterial.color.set(parameters.materialColor);
 });
 
 /**
@@ -23,6 +24,7 @@ const canvas = document.querySelector("canvas.webgl");
 
 // Scene
 const scene = new THREE.Scene();
+// scene.background = new THREE.Color("#bd28a9");
 
 /**
  * Test cube
@@ -66,6 +68,37 @@ const sectionMeshes = [mesh1, mesh2, mesh3];
 
 scene.add(mesh1, mesh2, mesh3);
 
+/**
+ * Particles
+ */
+// Geometry
+const particleCount = 200;
+const positions = new Float32Array(particleCount * 3);
+
+for (let i = 0; i < particleCount; i++) {
+  positions[i * 3 + 0] = (Math.random() - 0.5) * 10;
+  positions[i * 3 + 1] =
+    objectDistance * 0.4 -
+    Math.random() * objectDistance * sectionMeshes.length;
+  positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+}
+
+const particlesGeometry = new THREE.BufferGeometry();
+particlesGeometry.setAttribute(
+  "position",
+  new THREE.BufferAttribute(positions, 3)
+);
+
+// Materials
+const particlesMaterial = new THREE.PointsMaterial({
+  color: parameters.materialColor,
+  sizeAttenuation: true,
+  size: 0.03,
+});
+// Points
+const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+
+scene.add(particles);
 /**
  * Lights
  */
@@ -140,8 +173,6 @@ let cursor = {
 window.addEventListener("mousemove", (e) => {
   cursor.x = e.clientX / sizes.width - 0.5;
   cursor.y = e.clientY / sizes.height - 0.5;
-
-  console.log(cursor);
 });
 
 /*
