@@ -1,4 +1,5 @@
 import "./style.css";
+import gsap from "gsap";
 import * as THREE from "three";
 import * as dat from "lil-gui";
 
@@ -158,8 +159,25 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
  * Scroll
  */
 let scrollY = window.scrollY;
+let currentSection = 0;
+
 window.addEventListener("scroll", () => {
   scrollY = window.scrollY;
+
+  // Recognises the sections based on the user scrolling
+  const newSection = Math.round(scrollY / sizes.height);
+
+  if (newSection != currentSection) {
+    currentSection = newSection;
+    // scene.background = new THREE.Color("#bd28a9");
+
+    gsap.to(sectionMeshes[currentSection].rotation, {
+      duration: 1.5,
+      ease: "power2.inOut",
+      x: "+=6",
+      y: "+=3",
+    });
+  }
 });
 
 /**
@@ -199,8 +217,8 @@ const tick = () => {
     (parallaxY - cameraGroup.position.y) * 5 * deltaTime;
   // Animate meshes
   for (const mesh of sectionMeshes) {
-    mesh.rotation.x = elapsedTime * 0.1;
-    mesh.rotation.y = elapsedTime * 0.15;
+    mesh.rotation.x += deltaTime * 0.1;
+    mesh.rotation.y += deltaTime * 0.15;
   }
 
   // Render
